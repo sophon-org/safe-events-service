@@ -32,7 +32,7 @@ If you want to integrate with the events service, you need to:
 - Endpoint need to answer with:
   - `HTTP 202` status
   - Nothing in the body.
-  - It should answer **as soon as posible**, as events service will timeout in 2 seconds, if multiple timeouts are detected **service will stop sending requests** to your endpoint. So you should receive the event, return a HTTP response and then act upon it.
+  - It should answer **as soon as possible**, as events service will timeout in 2 seconds, if multiple timeouts are detected **service will stop sending requests** to your endpoint. So you should receive the event, return a HTTP response and then act upon it.
   - Configuring HTTP Basic Auth in your endpoint is recommended so a malicious user cannot post fake events to your service.
 
 ## Events supported
@@ -60,6 +60,7 @@ Some parameters are common to every event:
 ```json
 {
   "address": "<Ethereum checksummed address>",
+  "to": "<Ethereum checksummed address>",
   "type": "EXECUTED_MULTISIG_TRANSACTION",
   "safeTxHash": "<0x-prefixed-hex-string>",
   "failed": "true" | "false",
@@ -73,6 +74,7 @@ Some parameters are common to every event:
 ```json
 {
   "address": "<Ethereum checksummed address>",
+  "to": "<Ethereum checksummed address>",
   "type": "PENDING_MULTISIG_TRANSACTION",
   "safeTxHash": "<0x-prefixed-hex-string>",
   "chainId": "<stringified-int>"
@@ -135,6 +137,30 @@ Some parameters are common to every event:
 "address": "<Ethereum checksummed address>",
 "type": "MESSAGE_CREATED" | "MESSAGE_CONFIRMATION",
 "messageHash": "<0x-prefixed-hex-string>",
+"chainId": "<stringified-int>"
+}
+```
+
+### Reorg detected
+
+```json
+{
+"type": "REORG_DETECTED",
+"blockNumber": "<int>",
+"chainId": "<stringified-int>"
+}
+```
+
+### Delegates add/update/delete
+
+```json
+{
+"address": "<Ethereum checksummed address>" | null,
+"type": "NEW_DELEGATE" | "UPDATED_DELEGATE" | "DELETED_DELEGATE",
+"delegate": "<Ethereum checksummed address>",
+"delegator": "<Ethereum checksummed address>",
+"label": "<string>",
+"expiryDateSeconds": "<int>" | null,
 "chainId": "<stringified-int>"
 }
 ```
